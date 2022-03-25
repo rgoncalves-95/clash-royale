@@ -56,7 +56,7 @@ def insert_records(cards_info, player_id, conn):
 def main():
     api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjdjNmNkNzdjLWM4Y2MtNDM3Yy05ZTgxLTdjNDVmYThhNDVhNCIsImlhdCI6MTY0ODE0ODY3Niwic3ViIjoiZGV2ZWxvcGVyLzYyZjc2NTY2LWZjZDUtY2UxMy03Y2Y5LWNlMjQ3OWZhZGNmNiIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyI3OS4xNTMuMTY3LjIxOSJdLCJ0eXBlIjoiY2xpZW50In1dfQ.gzyKON_4Kd1XCvzXhZ_A6dLEu6Gl8qDrE7u5FFUo-AaIKWjGS1VP-Lt4jwOcdU3huVDYAyiBXgICiF8GXBjPiQ"
     database = r"db\database.db"
-    player_ids = ["%2392RP8QQL"]
+    player_ids = ["%2392RP8QQL", "%2398V2CR9R2", "%23Y9PVYGCUG", "%23QQGLRVULP", "%2328PJVCQLJ"]
 
     # create a database connection
     conn = create_connection(database)
