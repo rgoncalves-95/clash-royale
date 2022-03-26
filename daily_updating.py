@@ -28,8 +28,8 @@ def create_daily_user_entry(conn, card_info):
     :param card_info:
     :return: project id
     """
-    sql = ''' INSERT INTO cards(card_id,name,level,maxLevel,count,date,player_id) 
-              VALUES(?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO daily_records(card_id,level,count,date,player_id) 
+              VALUES(?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, card_info)
     conn.commit()
@@ -48,8 +48,7 @@ def insert_records(cards_info, player_id, conn):
 
     for record in enumerate(cards_info):
         card_entry = (
-            record[1]['id'], record[1]['name'], record[1]['level'], record[1]['maxLevel'],
-            record[1]['count'], date, player_id)
+            record[1]['id'], record[1]['level'], record[1]['count'], date, player_id)
         card_entry_id = create_daily_user_entry(conn, card_entry)
 
 
