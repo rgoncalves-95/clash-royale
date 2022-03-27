@@ -2,7 +2,6 @@ import sqlite3
 from sqlite3 import Error
 import requests
 import json
-import sqlite3
 from datetime import datetime
 
 
@@ -43,13 +42,57 @@ def request_info(player_id, api_key):
     return cards
 
 
-def insert_records(cards_info, player_id, conn):
+def insert_card_records(cards_info, player_id, conn):
     date = datetime.today().strftime('%Y-%m-%d')
 
     for record in enumerate(cards_info):
         card_entry = (
             record[1]['id'], record[1]['level'], record[1]['count'], date, player_id)
         card_entry_id = create_daily_user_entry(conn, card_entry)
+
+
+def create_battle_entry(conn, battle_info):
+    """
+    Create a new project into the projects table
+    :param conn:
+    :param battle_info:
+    :return: project id
+    """
+    sql = ''' INSERT INTO battle_log(type,battleTime,isLadderTournament,player_id) 
+              VALUES(?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, battle_info)
+    conn.commit()
+    return cur.lastrowid
+
+
+def fix_battle_log(battle_log):
+    date = datetime.today().strftime('%Y-%m-%d')
+    fixed_battle_log = {"type": [], "battleTime": [], "isLadderTournament": []}
+    for match in enumerate(battle_log):
+        battle_date = datetime.strptime(match[1]['battleTime'][:8], '%Y%m%d').strftime('%Y-%m-%d')
+        if date == battle_date:
+            fixed_battle_log['type'].append(match[1]['type'])
+            fixed_battle_log['battleTime'].append(battle_date)
+            fixed_battle_log['isLadderTournament'].append(match[1]['isLadderTournament'])
+    return fixed_battle_log
+
+
+def request_battle_log(player_id, api_key):
+    headers = {"Authorization": "Bearer " + api_key}
+    response = requests.get("https://api.clashroyale.com/v1/players/" + player_id + "/battlelog", headers=headers)
+    battle_log = response.json()
+    battle_log = fix_battle_log(battle_log=battle_log)
+    return battle_log
+
+
+def insert_battle_records(battle_log, player_id, conn):
+    n_battles = len(battle_log['type'])
+    if n_battles > 0:
+        for r in range(0, n_battles):
+            battle_entry = (
+                battle_log['type'][r], battle_log['battleTime'][r], battle_log['isLadderTournament'][r], player_id)
+            battle_entry_id = create_battle_entry(conn, battle_entry)
 
 
 def main():
@@ -60,8 +103,12 @@ def main():
     # create a database connection
     conn = create_connection(database)
     for player in player_ids:
+        # Request and insert cards data
         cards_info = request_info(player_id=player, api_key=api_key)
-        insert_records(cards_info=cards_info, player_id=player, conn=conn)
+        insert_card_records(cards_info=cards_info, player_id=player, conn=conn)
+        # Request and insert battle data
+        battle_info = request_battle_log(player_id=player, api_key=api_key)
+        insert_battle_records(battle_log=battle_info, player_id=player, conn=conn)
 
     conn.close()
 

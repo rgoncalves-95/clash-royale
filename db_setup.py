@@ -76,6 +76,14 @@ def main():
                                         maxLevel integer NOT NULL
                                     );"""
 
+    sql_create_battle_log_table = """CREATE TABLE IF NOT EXISTS battle_log (
+                                        id integer PRIMARY KEY,
+                                        type text NOT NULL,
+                                        battleTime text NOT NULL,
+                                        isLadderTournament text NOT NULL,
+                                        player_id text NOT NULL
+                                    );"""
+
     # create a database connection
     conn = create_connection(database)
 
@@ -84,6 +92,7 @@ def main():
         # create cards table
         create_table(conn, sql_create_daily_records_table)
         create_table(conn, sql_create_cards_info_table)
+        create_table(conn, sql_create_battle_log_table)
     else:
         print("Error! cannot create the database connection.")
 
