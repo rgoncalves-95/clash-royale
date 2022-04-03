@@ -65,7 +65,7 @@ def main():
                                         id integer PRIMARY KEY,
                                         card_id integer NOT NULL,
                                         level integer NOT NULL,
-                                        count text NOT NULL,
+                                        count integer NOT NULL,
                                         date text NOT NULL,
                                         player_id text NOT NULL
                                     );"""
